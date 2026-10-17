@@ -19,7 +19,7 @@ public class SecurityConfig {
             throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/css/**", "/error").permitAll()
+                .requestMatchers("/login", "/signup", "/css/**", "/error").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/teacher/**").hasRole("TEACHER")
                 .requestMatchers("/student/**").hasRole("STUDENT")

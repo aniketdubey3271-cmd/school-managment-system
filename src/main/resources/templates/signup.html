@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Student registration')}"></head><body>
+<main class="container page-shell d-flex align-items-center justify-content-center" style="min-height:100vh;padding-top:24px;padding-bottom:24px">
+<div class="row justify-content-center w-100"><div class="col-lg-8 col-xl-7"><div class="card border-0"><div class="card-body p-4 p-md-5">
+<div class="eyebrow">Student portal</div><h1 class="h2 mt-2 mb-2">Create your account</h1><p class="text-secondary mb-4">Register your student details to access your school portal.</p>
+<form th:action="@{/signup}" th:object="${form}" method="post" class="row g-3">
+<div class="col-md-6"><label class="form-label fw-semibold" for="name">Full name</label><input id="name" th:field="*{name}" class="form-control" required maxlength="100"><div class="text-danger small" th:errors="*{name}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="username">Username</label><input id="username" th:field="*{username}" class="form-control" required maxlength="50" autocomplete="username"><div class="text-danger small" th:errors="*{username}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="email">Email</label><input id="email" type="email" th:field="*{email}" class="form-control" required maxlength="100" autocomplete="email"><div class="text-danger small" th:errors="*{email}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="password">Password</label><input id="password" type="password" th:field="*{password}" class="form-control" required minlength="8" autocomplete="new-password"><div class="form-text">Use at least 8 characters.</div><div class="text-danger small" th:errors="*{password}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="rollNo">Roll number</label><input id="rollNo" th:field="*{rollNo}" class="form-control" required maxlength="20"><div class="text-danger small" th:errors="*{rollNo}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="classId">Class and section</label><select id="classId" th:field="*{classId}" class="form-select form-control" required><option value="">Choose your class</option><option th:each="schoolClass : ${classes}" th:value="${schoolClass.id}" th:text="${schoolClass.displayName}"></option></select><div class="text-danger small" th:errors="*{classId}"></div><div class="form-text" th:if="${#lists.isEmpty(classes)}">Registration is unavailable until the administrator adds a class.</div></div>
+<div class="col-12"><div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger mb-0"><p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p></div></div>
+<div class="col-12 d-grid mt-4"><button type="submit" class="btn btn-primary py-2" th:disabled="${#lists.isEmpty(classes)}">Create student account</button></div>
+</form><p class="text-center small text-secondary mt-4 mb-0">Already registered? <a th:href="@{/login}" class="fw-semibold text-decoration-none">Sign in</a></p>
+</div></div></div></div></main></body></html>
