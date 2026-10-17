@@ -45,6 +45,7 @@ import com.sms.school.TeachingAssignmentRepository;
  */
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:sqlite:file:testdb?mode=memory&cache=shared&foreign_keys=on",
+        "sms.demo-data.enabled=false",
         "sms.uploads.dir=${java.io.tmpdir}/sms-test-uploads"})
 @AutoConfigureMockMvc
 @Transactional

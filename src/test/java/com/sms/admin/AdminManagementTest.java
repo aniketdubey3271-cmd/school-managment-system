@@ -31,7 +31,9 @@ import com.sms.school.Subject;
 import com.sms.school.Teacher;
 import com.sms.school.TeacherRepository;
 
-@SpringBootTest(properties = "spring.datasource.url=jdbc:sqlite:file:testdb?mode=memory&cache=shared&foreign_keys=on")
+@SpringBootTest(properties = {
+    "spring.datasource.url=jdbc:sqlite:file:testdb?mode=memory&cache=shared&foreign_keys=on",
+    "sms.demo-data.enabled=false"})
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser(roles = "ADMIN")

@@ -50,6 +50,10 @@ Set `JAVA_HOME` to the installed JDK 21 directory and ensure its `bin` directory
 
 On first startup, Flyway creates and updates the SQLite schema. By default, the database file is `sms.db` in the working directory, and uploaded assignment files are stored under `uploads/`.
 
+Demo records are enabled by default for local development. The application fills the database up to 21 students and 3 teachers without replacing existing records, creates the `BCA-SEM-5` class if needed, and assigns sample subjects to teachers. Set `SMS_DEMO_DATA_ENABLED=false` to disable demo seeding. Generated demo accounts use `SMS_DEMO_PASSWORD` (default: `DemoPass123!`); change it before sharing the app, and disable demo data outside local development.
+
+Generated demo usernames use the `demo-teacher-NN` and `demo-student-NN` patterns. In the existing local database, the additional accounts are `demo-teacher-01` and `demo-teacher-02`, plus `demo-student-01` through `demo-student-20`.
+
 ## Configuration
 
 Configuration can be supplied through environment variables; defaults are shown below.

@@ -35,7 +35,9 @@ import jakarta.persistence.EntityManager;
  * Class 7-A: "classteach" is class teacher and teaches Maths; "scienceteach" teaches Science only.
  * Class 7-B belongs to "otherteach". Each test's data is rolled back afterwards.
  */
-@SpringBootTest(properties = "spring.datasource.url=jdbc:sqlite:file:testdb?mode=memory&cache=shared&foreign_keys=on")
+@SpringBootTest(properties = {
+    "spring.datasource.url=jdbc:sqlite:file:testdb?mode=memory&cache=shared&foreign_keys=on",
+    "sms.demo-data.enabled=false"})
 @AutoConfigureMockMvc
 @Transactional
 class TeacherPortalTest {

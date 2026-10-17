@@ -38,6 +38,7 @@ import com.sms.school.Subject;
 /** "stu1" and "stu2" share class 6-A; each test checks stu1 only ever sees stu1's data. */
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:sqlite:file:testdb?mode=memory&cache=shared&foreign_keys=on",
+    "sms.demo-data.enabled=false",
         "sms.uploads.dir=${java.io.tmpdir}/sms-test-uploads"})
 @AutoConfigureMockMvc
 @Transactional

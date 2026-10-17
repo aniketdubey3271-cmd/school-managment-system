@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
-<body>
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<html xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head><body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav><main class="container page-shell">
+<section class="hero"><div class="eyebrow">School overview · Administrator</div><h1>School administration</h1><p>Manage your school records, communication, and reporting from one workspace.</p></section>
+<div class="row g-3">
+<div class="col-sm-6 col-lg-4"><a th:href="@{/admin/students}" class="portal-card"><span class="icon">01</span><h2>Students</h2><p>Student records and enrolment</p></a></div>
+<div class="col-sm-6 col-lg-4"><a th:href="@{/admin/teachers}" class="portal-card"><span class="icon">02</span><h2>Teachers</h2><p>Staff accounts and details</p></a></div>
+<div class="col-sm-6 col-lg-4"><a th:href="@{/admin/classes}" class="portal-card"><span class="icon">03</span><h2>Classes</h2><p>Class groups and rosters</p></a></div>
+<div class="col-sm-6 col-lg-4"><a th:href="@{/admin/subjects}" class="portal-card"><span class="icon">04</span><h2>Subjects</h2><p>Course and subject catalogue</p></a></div>
+<div class="col-sm-6 col-lg-4"><a th:href="@{/admin/announcements}" class="portal-card"><span class="icon">05</span><h2>Announcements</h2><p>Share important school updates</p></a></div>
+<div class="col-sm-6 col-lg-4"><a th:href="@{/admin/reports}" class="portal-card"><span class="icon">06</span><h2>Reports</h2><p>School performance and insights</p></a></div>
+</div></main></body></html>
 
-<div class="container">
-    <h1 class="h3 mb-4">Admin Dashboard</h1>
-    <div class="row g-3">
-        <div class="col-md-3"><a th:href="@{/admin/students}" class="card card-body text-decoration-none">Manage Students</a></div>
-        <div class="col-md-3"><a th:href="@{/admin/teachers}" class="card card-body text-decoration-none">Manage Teachers</a></div>
-        <div class="col-md-3"><a th:href="@{/admin/classes}" class="card card-body text-decoration-none">Manage Classes</a></div>
-        <div class="col-md-3"><a th:href="@{/admin/subjects}" class="card card-body text-decoration-none">Manage Subjects</a></div>
-        <div class="col-md-3"><a th:href="@{/admin/announcements}" class="card card-body text-decoration-none">Announcements</a></div>
-        <div class="col-md-3"><a th:href="@{/admin/reports}" class="card card-body text-decoration-none">Reports</a></div>
-    </div>
-</div>
-
-</body>
-</html>

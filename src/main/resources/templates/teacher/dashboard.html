@@ -1,32 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Teacher Dashboard')}"></head>
-<body>
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<html xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Teacher Dashboard')}"></head><body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav><main class="container page-shell">
+<section class="hero"><div class="eyebrow">Teaching portal · Your classroom</div><h1>Teaching dashboard</h1><p>Access your classes, assignments, and announcements.</p></section>
+<div class="row g-3">
+<div class="col-md-4"><a th:href="@{/teacher/classes}" class="portal-card"><span class="icon">01</span><h2>My classes</h2><p>Students, attendance and grades</p></a></div>
+<div class="col-md-4"><a th:href="@{/teacher/assignments}" class="portal-card"><span class="icon">02</span><h2>Assignments</h2><p>Set work and see submissions</p></a></div>
+<div class="col-md-4"><a th:href="@{/teacher/announcements}" class="portal-card"><span class="icon">03</span><h2>Announcements</h2><p>Message your classes</p></a></div>
+</div></main></body></html>
 
-<div class="container">
-    <h1 class="h3 mb-4">Teacher Dashboard</h1>
-    <div class="row g-3">
-        <div class="col-md-4">
-            <a th:href="@{/teacher/classes}" class="card card-body text-decoration-none">
-                My Classes
-                <small class="text-muted">Students, attendance and grades</small>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a th:href="@{/teacher/assignments}" class="card card-body text-decoration-none">
-                Assignments
-                <small class="text-muted">Set work and see submissions</small>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a th:href="@{/teacher/announcements}" class="card card-body text-decoration-none">
-                Announcements
-                <small class="text-muted">Message your classes</small>
-            </a>
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
