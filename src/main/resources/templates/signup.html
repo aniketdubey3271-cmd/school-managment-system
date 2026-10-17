@@ -1,16 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Student registration')}"></head><body>
+<html xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Create an account')}"></head><body>
 <main class="container page-shell d-flex align-items-center justify-content-center" style="min-height:100vh;padding-top:24px;padding-bottom:24px">
 <div class="row justify-content-center w-100"><div class="col-lg-8 col-xl-7"><div class="card border-0"><div class="card-body p-4 p-md-5">
-<div class="eyebrow">Student portal</div><h1 class="h2 mt-2 mb-2">Create your account</h1><p class="text-secondary mb-4">Register your student details to access your school portal.</p>
-<form th:action="@{/signup}" th:object="${form}" method="post" class="row g-3">
-<div class="col-md-6"><label class="form-label fw-semibold" for="name">Full name</label><input id="name" th:field="*{name}" class="form-control" required maxlength="100"><div class="text-danger small" th:errors="*{name}"></div></div>
+<div class="eyebrow">Student Management System</div><h1 class="h2 mt-2 mb-2">Create your account</h1><p class="text-secondary mb-4">Choose your school role to see the matching registration details.</p>
+<form th:action="@{/signup}" th:object="${form}" method="post" class="row g-3" id="signupForm" th:attr="data-admin-enabled=${adminSignupEnabled},data-teacher-enabled=${teacherSignupEnabled}">
+<div class="col-12"><label class="form-label fw-semibold" for="role">I am registering as</label><select id="role" th:field="*{role}" class="form-select form-control" required><option value="STUDENT">Student</option><option value="TEACHER">Teacher</option><option value="ADMIN">Administrator</option></select><div class="text-danger small" th:errors="*{role}"></div></div>
+<div class="col-md-6" id="profileNameField"><label class="form-label fw-semibold" for="name">Full name</label><input id="name" th:field="*{name}" class="form-control" maxlength="100" autocomplete="name"><div class="text-danger small" th:errors="*{name}"></div></div>
 <div class="col-md-6"><label class="form-label fw-semibold" for="username">Username</label><input id="username" th:field="*{username}" class="form-control" required maxlength="50" autocomplete="username"><div class="text-danger small" th:errors="*{username}"></div></div>
 <div class="col-md-6"><label class="form-label fw-semibold" for="email">Email</label><input id="email" type="email" th:field="*{email}" class="form-control" required maxlength="100" autocomplete="email"><div class="text-danger small" th:errors="*{email}"></div></div>
-<div class="col-md-6"><label class="form-label fw-semibold" for="password">Password</label><input id="password" type="password" th:field="*{password}" class="form-control" required minlength="8" autocomplete="new-password"><div class="form-text">Use at least 8 characters.</div><div class="text-danger small" th:errors="*{password}"></div></div>
-<div class="col-md-6"><label class="form-label fw-semibold" for="rollNo">Roll number</label><input id="rollNo" th:field="*{rollNo}" class="form-control" required maxlength="20"><div class="text-danger small" th:errors="*{rollNo}"></div></div>
-<div class="col-md-6"><label class="form-label fw-semibold" for="classId">Class and section</label><select id="classId" th:field="*{classId}" class="form-select form-control" required><option value="">Choose your class</option><option th:each="schoolClass : ${classes}" th:value="${schoolClass.id}" th:text="${schoolClass.displayName}"></option></select><div class="text-danger small" th:errors="*{classId}"></div><div class="form-text" th:if="${#lists.isEmpty(classes)}">Registration is unavailable until the administrator adds a class.</div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="password">Password</label><input id="password" type="password" th:field="*{password}" class="form-control" required minlength="8" maxlength="72" autocomplete="new-password"><div class="form-text">Use at least 8 characters.</div><div class="text-danger small" th:errors="*{password}"></div></div>
+
+<section class="col-12 row g-3 m-0 p-0" id="studentFields" data-role-fields="STUDENT">
+<div class="col-md-6"><label class="form-label fw-semibold" for="rollNo">Roll number</label><input id="rollNo" th:field="*{rollNo}" class="form-control" maxlength="20"><div class="text-danger small" th:errors="*{rollNo}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="classId">Class and section</label><select id="classId" th:field="*{classId}" class="form-select form-control"><option value="">Choose your class</option><option th:each="schoolClass : ${classes}" th:value="${schoolClass.id}" th:text="${schoolClass.displayName}"></option></select><div class="text-danger small" th:errors="*{classId}"></div><div class="form-text" th:if="${#lists.isEmpty(classes)}">No classes exist yet. Ask the administrator to add classes before student registration.</div></div>
+</section>
+
+<section class="col-12 row g-3 m-0 p-0 d-none" id="teacherFields" data-role-fields="TEACHER" hidden>
+<div class="col-md-6"><label class="form-label fw-semibold" for="subjectSpecialization">Subject specialization</label><input id="subjectSpecialization" th:field="*{subjectSpecialization}" class="form-control" maxlength="100" placeholder="e.g. Mathematics"><div class="text-danger small" th:errors="*{subjectSpecialization}"></div></div>
+<div class="col-md-6"><label class="form-label fw-semibold" for="contact">Contact number</label><input id="contact" th:field="*{contact}" class="form-control" maxlength="20" autocomplete="tel"><div class="text-danger small" th:errors="*{contact}"></div></div>
+<div class="col-12"><label class="form-label fw-semibold" for="teacherCode">Teacher invitation code</label><input id="teacherCode" type="password" th:field="*{teacherCode}" class="form-control" autocomplete="off"><div class="text-danger small" th:errors="*{teacherCode}"></div><div class="form-text" th:if="${teacherSignupEnabled}">Enter the invitation code provided by the school administrator.</div><div class="form-text" th:unless="${teacherSignupEnabled}">Teacher self-registration is not enabled. The system owner must configure SMS_TEACHER_SIGNUP_CODE in the hosting environment.</div></div>
+<div class="col-12"><div class="alert alert-info mb-0">After registration, an administrator can assign your classes and subjects.</div></div>
+</section>
+
+<section class="col-12 row g-3 m-0 p-0 d-none" id="adminFields" data-role-fields="ADMIN" hidden>
+<div class="col-12"><label class="form-label fw-semibold" for="adminCode">Administrator invitation code</label><input id="adminCode" type="password" th:field="*{adminCode}" class="form-control" autocomplete="off"><div class="text-danger small" th:errors="*{adminCode}"></div><div class="form-text" th:if="${adminSignupEnabled}">Enter the invitation code provided by the system owner.</div><div class="form-text" th:unless="${adminSignupEnabled}">Administrator self-registration is not enabled. The system owner must configure SMS_ADMIN_SIGNUP_CODE in the hosting environment.</div></div>
+<div class="col-12"><div class="alert alert-warning mb-0">Administrator access can manage the whole school. Only register with an invitation code from the system owner.</div></div>
+</section>
+
 <div class="col-12"><div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger mb-0"><p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p></div></div>
-<div class="col-12 d-grid mt-4"><button type="submit" class="btn btn-primary py-2" th:disabled="${#lists.isEmpty(classes)}">Create student account</button></div>
+<div class="col-12 d-grid mt-4"><button type="submit" class="btn btn-primary py-2" id="submitSignup">Create student account</button></div>
 </form><p class="text-center small text-secondary mt-4 mb-0">Already registered? <a th:href="@{/login}" class="fw-semibold text-decoration-none">Sign in</a></p>
-</div></div></div></div></main></body></html>
+</div></div></div></div></main>
+<script>
+(() => {
+  const role = document.getElementById('role');
+  const button = document.getElementById('submitSignup');
+  const form = document.getElementById('signupForm');
+  const nameField = document.getElementById('profileNameField');
+  const nameInput = document.getElementById('name');
+  const adminEnabled = form.dataset.adminEnabled === 'true';
+  const panels = [...document.querySelectorAll('[data-role-fields]')];
+  const update = () => {
+    panels.forEach(panel => {
+      const active = panel.dataset.roleFields === role.value;
+      panel.hidden = !active;
+      panel.classList.toggle('d-none', !active);
+      panel.querySelectorAll('input, select').forEach(field => {
+        field.disabled = !active;
+        field.required = active && ['rollNo', 'classId', 'teacherCode', 'adminCode'].includes(field.id);
+      });
+    });
+    const needsName = role.value !== 'ADMIN';
+    nameField.hidden = !needsName;
+    nameField.classList.toggle('d-none', !needsName);
+    nameInput.disabled = !needsName;
+    nameInput.required = needsName;
+    button.disabled = (role.value === 'ADMIN' && !adminEnabled)
+      || (role.value === 'TEACHER' && form.dataset.teacherEnabled !== 'true');
+    button.textContent = `Create ${role.options[role.selectedIndex].text.toLowerCase()} account`;
+  };
+  role.addEventListener('change', update);
+  update();
+})();
+</script>
+</body></html>
