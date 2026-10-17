@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Attendance ' + ${schoolClass.displayName})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 720px">
+    <a th:replace="~{fragments/layout :: back('/teacher/classes', 'My Classes')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="h3 mb-3" th:text="'Attendance: ' + ${schoolClass.displayName}">Attendance</h1>
+
+    <!-- Pick a day (GET reloads with that day's saved attendance) -->
+    <form method="get" class="d-flex gap-2 align-items-end mb-3">
+        <div>
+            <label for="pick-date" class="form-label">Date</label>
+            <input type="date" id="pick-date" name="date" class="form-control"
+                   th:value="${form.date}" th:max="${today}" onchange="this.form.submit()">
+        </div>
+    </form>
+
+    <div th:if="${!alreadyMarked && !#lists.isEmpty(students)}" class="alert alert-info">
+        Not marked yet for this date. Everyone starts as Present; change anyone who is absent, then save.
+    </div>
+
+    <div th:if="${#lists.isEmpty(students)}" class="alert alert-warning">No students in this class yet.</div>
+
+    <form th:unless="${#lists.isEmpty(students)}" method="post"
+          th:action="@{/teacher/classes/{id}/attendance(id=${schoolClass.id})}">
+        <input type="hidden" name="date" th:value="${form.date}">
+        <table class="table align-middle">
+            <thead><tr><th>Roll no</th><th>Name</th><th class="text-end">Status</th></tr></thead>
+            <tbody>
+            <tr th:each="s : ${students}" th:with="st=${form.statuses[s.id]}">
+                <td th:text="${s.rollNo}"></td>
+                <td th:text="${s.name}"></td>
+                <td class="text-end text-nowrap">
+                    <input type="radio" class="btn-check" value="PRESENT" autocomplete="off"
+                           th:name="'statuses[' + ${s.id} + ']'" th:id="'p' + ${s.id}"
+                           th:checked="${st == null || st.name() == 'PRESENT'}">
+                    <label class="btn btn-sm btn-outline-success" th:for="'p' + ${s.id}">Present</label>
+                    <input type="radio" class="btn-check" value="ABSENT" autocomplete="off"
+                           th:name="'statuses[' + ${s.id} + ']'" th:id="'a' + ${s.id}"
+                           th:checked="${st != null && st.name() == 'ABSENT'}">
+                    <label class="btn btn-sm btn-outline-danger" th:for="'a' + ${s.id}">Absent</label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Save attendance</button>
+    </form>
+</div>
+
+</body>
+</html>

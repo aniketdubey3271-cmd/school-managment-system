@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Student Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <h1 class="h3 mb-1" th:text="'Hello, ' + ${student.name}">Hello</h1>
+    <p class="text-muted mb-4"
+       th:text="${student.schoolClass} ? 'Class ' + ${student.schoolClass.displayName} + ' · Roll no ' + ${student.rollNo} : 'Not assigned to a class yet'"></p>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <a th:href="@{/student/attendance}" class="card card-body text-decoration-none h-100">
+                My Attendance
+                <span class="fs-4 fw-semibold"
+                      th:text="${attendanceSummary.percent} != null ? ${attendanceSummary.percent} + '%' : '—'">—</span>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a th:href="@{/student/assignments}" class="card card-body text-decoration-none h-100">
+                My Assignments
+                <span class="fs-4 fw-semibold" th:text="${pendingAssignments} + ' to do'">0 to do</span>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a th:href="@{/student/grades}" class="card card-body text-decoration-none h-100">My Grades</a>
+        </div>
+        <div class="col-md-3">
+            <a th:href="@{/student/profile}" class="card card-body text-decoration-none h-100">My Profile</a>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <a th:href="@{/student/report-card}" class="btn btn-outline-primary">Download report card (PDF)</a>
+        <a th:href="@{/student/id-card}" class="btn btn-outline-primary">Download ID card (PDF)</a>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+        <h2 class="h5 m-0">Latest announcements</h2>
+        <a th:href="@{/student/announcements}">See all</a>
+    </div>
+    <div th:replace="~{fragments/announcements :: list(${latestAnnouncements}, null, null)}"></div>
+</div>
+
+</body>
+</html>

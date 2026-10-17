@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Report ' + ${attendance.schoolClass.displayName})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 960px">
+    <a th:replace="~{fragments/layout :: back('/teacher/classes', 'My Classes')}"></a>
+    <h1 class="h3 mb-3" th:text="'Class report: ' + ${attendance.schoolClass.displayName}">Class report</h1>
+
+    <h2 class="h5">Attendance</h2>
+    <form th:replace="~{fragments/reports :: rangeForm(${range})}"></form>
+    <div th:replace="~{fragments/reports :: studentAttendance(${attendance})}"></div>
+
+    <h2 class="h5 mt-4">Performance</h2>
+    <p class="text-muted small" th:text="${allSubjects} ? 'All subjects (you are the class teacher).' : 'Subjects you teach in this class.'"></p>
+    <div th:replace="~{fragments/reports :: performance(${performance})}"></div>
+</div>
+
+</body>
+</html>

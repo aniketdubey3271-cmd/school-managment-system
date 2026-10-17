@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <h1 class="h3 mb-4">Admin Dashboard</h1>
+    <div class="row g-3">
+        <div class="col-md-3"><a th:href="@{/admin/students}" class="card card-body text-decoration-none">Manage Students</a></div>
+        <div class="col-md-3"><a th:href="@{/admin/teachers}" class="card card-body text-decoration-none">Manage Teachers</a></div>
+        <div class="col-md-3"><a th:href="@{/admin/classes}" class="card card-body text-decoration-none">Manage Classes</a></div>
+        <div class="col-md-3"><a th:href="@{/admin/subjects}" class="card card-body text-decoration-none">Manage Subjects</a></div>
+        <div class="col-md-3"><a th:href="@{/admin/announcements}" class="card card-body text-decoration-none">Announcements</a></div>
+        <div class="col-md-3"><a th:href="@{/admin/reports}" class="card card-body text-decoration-none">Reports</a></div>
+    </div>
+</div>
+
+</body>
+</html>

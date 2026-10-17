@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Text-like input bound to the enclosing th:object: field(field, label, type) -->
+<div th:fragment="field(field, label, type)" class="mb-3">
+    <label class="form-label" th:for="${field}" th:text="${label}">Label</label>
+    <input th:type="${type}" class="form-control" th:field="*{__${field}__}" th:errorclass="is-invalid">
+    <div class="invalid-feedback" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}"></div>
+</div>
+
+<!-- Password input that never echoes the value back: password(label, hint) -->
+<div th:fragment="password(label, hint)" class="mb-3">
+    <label class="form-label" for="password" th:text="${label}">Password</label>
+    <input type="password" id="password" name="password" autocomplete="new-password"
+           class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+    <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    <div class="form-text" th:if="${hint}" th:text="${hint}"></div>
+</div>
+
+<!-- Form-wide (non-field) errors -->
+<div th:fragment="globalErrors" th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+    <div th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Announcements')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 840px">
+    <a th:replace="~{fragments/layout :: back('/admin/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="h3 mb-3">Announcements</h1>
+
+    <form th:object="${form}" th:action="@{/admin/announcements}" method="post" class="card card-body mb-4">
+        <h2 class="h6">New announcement</h2>
+        <div th:replace="~{fragments/form :: globalErrors}"></div>
+        <div class="mb-3">
+            <label class="form-label" for="targetClassId">Send to</label>
+            <select class="form-select" th:field="*{targetClassId}" th:errorclass="is-invalid">
+                <option value="">Everyone (whole school)</option>
+                <option th:each="c : ${classes}" th:value="${c.id}" th:text="'Class ' + ${c.displayName}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('targetClassId')}" th:errors="*{targetClassId}"></div>
+        </div>
+        <div th:replace="~{fragments/form :: field('title', 'Title', 'text')}"></div>
+        <div class="mb-3">
+            <label class="form-label" for="content">Message</label>
+            <textarea class="form-control" rows="4" th:field="*{content}" th:errorclass="is-invalid"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+        </div>
+        <div><button type="submit" class="btn btn-primary">Post</button></div>
+    </form>
+
+    <h2 class="h5">All announcements</h2>
+    <div th:replace="~{fragments/announcements :: list(${views}, '/admin/announcements', null)}"></div>
+</div>
+
+</body>
+</html>

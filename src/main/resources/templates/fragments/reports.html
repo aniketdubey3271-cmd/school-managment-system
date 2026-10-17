@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Date range picker (GET to the current page): rangeForm(range) -->
+<form th:fragment="rangeForm(range)" method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label for="from" class="form-label">From</label>
+        <input type="date" id="from" name="from" class="form-control" th:value="${range.from}">
+    </div>
+    <div class="col-auto">
+        <label for="to" class="form-label">To</label>
+        <input type="date" id="to" name="to" class="form-control" th:value="${range.to}">
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-outline-primary">Apply</button></div>
+</form>
+
+<!-- "92% (46 / 50)" or a dash: pct(tally) -->
+<span th:fragment="pct(tally)"
+      th:text="${tally.percent()} != null ? ${tally.percent()} + '% (' + ${tally.present} + ' / ' + ${tally.present + tally.absent} + ')' : '—'"
+      th:classappend="${tally.percent() != null && tally.percent() < 75} ? 'text-danger fw-semibold'"></span>
+
+<!-- Per-student attendance for a class: studentAttendance(attendance) -->
+<div th:fragment="studentAttendance(attendance)">
+    <p class="mb-2">Class attendance: <span th:replace="~{fragments/reports :: pct(${attendance.tally})}"></span></p>
+    <table class="table table-sm">
+        <thead><tr><th>Roll no</th><th>Student</th><th>Present</th><th>Absent</th><th>Attendance</th></tr></thead>
+        <tbody>
+        <tr th:each="r : ${attendance.students}">
+            <td th:text="${r.student.rollNo}"></td>
+            <td th:text="${r.student.name}"></td>
+            <td th:text="${r.tally.present}"></td>
+            <td th:text="${r.tally.absent}"></td>
+            <td><span th:replace="~{fragments/reports :: pct(${r.tally})}"></span></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(attendance.students)}">
+            <td colspan="5" class="text-center text-muted">No students in this class.</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="form-text">Below 75% is highlighted.</p>
+</div>
+
+<!-- Average % per subject per exam: performance(performance) -->
+<div th:fragment="performance(performance)">
+    <div th:if="${#lists.isEmpty(performance.subjects)}" class="text-muted">No marks entered yet.</div>
+    <div class="table-responsive" th:unless="${#lists.isEmpty(performance.subjects)}">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th>Subject</th>
+                <th th:each="exam : ${performance.exams}" th:text="${exam.label}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sp : ${performance.subjects}">
+                <td th:text="${sp.subject.name}"></td>
+                <td th:each="exam : ${performance.exams}" th:with="stat=${sp.byExam.get(exam)}">
+                    <span th:if="${stat}" th:text="${stat.averagePercent} + '%'"></span>
+                    <small th:if="${stat}" class="text-muted" th:text="'(' + ${stat.graded} + ' graded)'"></small>
+                    <span th:unless="${stat}" class="text-muted">—</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="form-text">Class average of each student's percentage.</p>
+</div>
+
+</body>
+</html>

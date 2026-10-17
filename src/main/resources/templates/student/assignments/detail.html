@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${assignment.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 720px">
+    <a th:replace="~{fragments/layout :: back('/student/assignments', 'My Assignments')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <h1 class="h3 mb-1" th:text="${assignment.title}">Title</h1>
+    <p class="text-muted"
+       th:text="${assignment.subject.name} + ' · ' + ${assignment.teacher.name} + ' · due ' + ${#temporals.format(assignment.dueDate, 'EEE, dd MMM yyyy, HH:mm')}"></p>
+    <p th:if="${assignment.description}" th:text="${assignment.description}" style="white-space: pre-line"></p>
+
+    <div class="card card-body mb-3">
+        <h2 class="h6">Your submission</h2>
+        <div th:if="${submission}">
+            <a th:href="@{/student/assignments/{id}/file(id=${assignment.id})}" th:text="${submission.originalFilename}">file</a>
+            <span class="text-muted small"
+                  th:text="' · submitted ' + ${#temporals.format(submission.submittedAt, 'dd MMM yyyy, HH:mm')}"></span>
+        </div>
+        <div th:unless="${submission}" class="text-muted">Not submitted yet.</div>
+    </div>
+
+    <div th:if="${pastDue}" class="alert alert-secondary">The due date has passed; submissions are closed.</div>
+
+    <form th:unless="${pastDue}" th:action="@{/student/assignments/{id}/submit(id=${assignment.id})}"
+          method="post" enctype="multipart/form-data">
+        <label for="file" class="form-label" th:text="${submission} ? 'Replace your file' : 'Upload your work'">Upload</label>
+        <input type="file" id="file" name="file" class="form-control mb-1" required>
+        <div class="form-text mb-3" th:text="'Allowed: ' + ${allowedTypes} + '. Max 10 MB.'"></div>
+        <button type="submit" class="btn btn-primary" th:text="${submission} ? 'Resubmit' : 'Submit'">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

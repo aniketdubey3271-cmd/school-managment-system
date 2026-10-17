@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Profile')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 720px">
+    <a th:replace="~{fragments/layout :: back('/student/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="h3 mb-3">My Profile</h1>
+
+    <dl class="row mb-1">
+        <dt class="col-sm-4">Name</dt><dd class="col-sm-8" th:text="${student.name}"></dd>
+        <dt class="col-sm-4">Class</dt>
+        <dd class="col-sm-8" th:text="${student.schoolClass} ? ${student.schoolClass.displayName} : '—'"></dd>
+        <dt class="col-sm-4">Roll number</dt><dd class="col-sm-8" th:text="${student.rollNo}"></dd>
+        <dt class="col-sm-4">Date of birth</dt>
+        <dd class="col-sm-8" th:text="${student.dob} ? ${#temporals.format(student.dob, 'dd MMM yyyy')} : '—'"></dd>
+        <dt class="col-sm-4">Address</dt><dd class="col-sm-8" th:text="${student.address} ?: '—'"></dd>
+        <dt class="col-sm-4">Parent contact</dt><dd class="col-sm-8" th:text="${student.parentContact} ?: '—'"></dd>
+        <dt class="col-sm-4">Username</dt><dd class="col-sm-8" th:text="${student.user.username}"></dd>
+        <dt class="col-sm-4">Email</dt><dd class="col-sm-8" th:text="${student.user.email}"></dd>
+    </dl>
+    <p class="form-text mb-4">To correct any of these details, contact the school office.</p>
+
+    <h2 class="h5">Change password</h2>
+    <form th:object="${form}" th:action="@{/student/profile/password}" method="post" style="max-width: 360px">
+        <div th:replace="~{fragments/form :: globalErrors}"></div>
+        <div class="mb-3" th:each="f : ${ {'currentPassword', 'newPassword', 'confirmPassword'} }">
+            <label class="form-label" th:for="${f}"
+                   th:text="${f == 'currentPassword'} ? 'Current password' : (${f == 'newPassword'} ? 'New password' : 'Confirm new password')"></label>
+            <input type="password" class="form-control" th:id="${f}" th:name="${f}"
+                   th:autocomplete="${f == 'currentPassword'} ? 'current-password' : 'new-password'"
+                   th:classappend="${#fields.hasErrors(f)} ? 'is-invalid'" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors(f)}" th:errors="*{__${f}__}"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Change password</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Attendance')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 720px">
+    <a th:replace="~{fragments/layout :: back('/student/dashboard', 'Dashboard')}"></a>
+    <h1 class="h3 mb-3">My Attendance</h1>
+
+    <div class="row g-3 mb-4">
+        <div class="col-4"><div class="card card-body text-center">
+            <div class="text-muted small">Attendance</div>
+            <div class="fs-4 fw-semibold" th:text="${summary.percent} != null ? ${summary.percent} + '%' : '—'"></div>
+        </div></div>
+        <div class="col-4"><div class="card card-body text-center">
+            <div class="text-muted small">Present</div>
+            <div class="fs-4 fw-semibold text-success" th:text="${summary.present}"></div>
+        </div></div>
+        <div class="col-4"><div class="card card-body text-center">
+            <div class="text-muted small">Absent</div>
+            <div class="fs-4 fw-semibold text-danger" th:text="${summary.absent}"></div>
+        </div></div>
+    </div>
+
+    <table class="table">
+        <thead><tr><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+        <tr th:each="a : ${records}">
+            <td th:text="${#temporals.format(a.date, 'EEE, dd MMM yyyy')}"></td>
+            <td>
+                <span th:if="${a.status.name() == 'PRESENT'}" class="badge text-bg-success">Present</span>
+                <span th:if="${a.status.name() == 'ABSENT'}" class="badge text-bg-danger">Absent</span>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(records)}">
+            <td colspan="2" class="text-center text-muted">No attendance recorded yet.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

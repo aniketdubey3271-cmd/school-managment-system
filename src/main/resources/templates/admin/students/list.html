@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Students')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <a th:replace="~{fragments/layout :: back('/admin/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0">Students</h1>
+        <div class="d-flex gap-2">
+            <form method="get" th:action="@{/admin/students}" class="d-flex gap-2">
+                <select name="classId" class="form-select" onchange="this.form.submit()">
+                    <option value="">All classes</option>
+                    <option th:each="c : ${classes}" th:value="${c.id}" th:text="${c.displayName}"
+                            th:selected="${c.id == classId}"></option>
+                </select>
+            </form>
+            <a th:href="@{/admin/students/new(classId=${classId})}" class="btn btn-primary text-nowrap">Add student</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+            <tr><th>Name</th><th>Class</th><th>Roll no</th><th>Username</th><th>Parent contact</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${students}">
+                <td th:text="${s.name}"></td>
+                <td th:text="${s.schoolClass} ? ${s.schoolClass.displayName} : '—'"></td>
+                <td th:text="${s.rollNo}"></td>
+                <td th:text="${s.user.username}"></td>
+                <td th:text="${s.parentContact} ?: '—'"></td>
+                <td>
+                    <span th:if="${s.user.enabled}" class="badge text-bg-success">Active</span>
+                    <span th:unless="${s.user.enabled}" class="badge text-bg-secondary">Disabled</span>
+                </td>
+                <td class="text-end text-nowrap">
+                    <a th:href="@{/admin/students/{id}/report-card(id=${s.id})}" class="btn btn-sm btn-outline-primary">Report card</a>
+                    <a th:href="@{/admin/students/{id}/id-card(id=${s.id})}" class="btn btn-sm btn-outline-primary">ID card</a>
+                    <a th:href="@{/admin/students/{id}/edit(id=${s.id})}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <form th:action="@{/admin/students/{id}/delete(id=${s.id})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete this student and their login?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(students)}">
+                <td colspan="7" class="text-center text-muted">No students yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

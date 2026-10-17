@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${form.id == null} ? 'Add student' : 'Edit student')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 640px">
+    <a th:replace="~{fragments/layout :: back('/admin/students', 'Students')}"></a>
+    <h1 class="h3 mb-4" th:text="${form.id == null} ? 'Add student' : 'Edit student'">Student</h1>
+
+    <div th:if="${#lists.isEmpty(classes)}" class="alert alert-warning">
+        Create a class first: <a th:href="@{/admin/classes/new}">add a class</a>.
+    </div>
+
+    <form th:object="${form}" method="post"
+          th:action="${form.id == null} ? @{/admin/students} : @{/admin/students/{id}(id=${form.id})}">
+        <div th:replace="~{fragments/form :: globalErrors}"></div>
+
+        <h2 class="h6 text-muted">Login</h2>
+        <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input type="text" class="form-control" th:field="*{username}" th:errorclass="is-invalid"
+                   th:readonly="${form.id != null}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+        <div th:replace="~{fragments/form :: field('email', 'Email', 'email')}"></div>
+        <div th:replace="~{fragments/form :: password(${form.id == null} ? 'Password' : 'New password',
+                ${form.id == null} ? 'At least 8 characters.' : 'Leave blank to keep the current password.')}"></div>
+        <div class="form-check mb-4" th:if="${form.id != null}">
+            <input type="checkbox" class="form-check-input" th:field="*{enabled}">
+            <label class="form-check-label" th:for="${#ids.prev('enabled')}">Account active (can log in)</label>
+        </div>
+
+        <h2 class="h6 text-muted">Student details</h2>
+        <div th:replace="~{fragments/form :: field('name', 'Full name', 'text')}"></div>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <label class="form-label" for="classId">Class</label>
+                <select class="form-select" th:field="*{classId}" th:errorclass="is-invalid">
+                    <option value="">Select class</option>
+                    <option th:each="c : ${classes}" th:value="${c.id}" th:text="${c.displayName}"></option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('classId')}" th:errors="*{classId}"></div>
+            </div>
+            <div class="col-sm-6">
+                <div th:replace="~{fragments/form :: field('rollNo', 'Roll number', 'text')}"></div>
+            </div>
+        </div>
+        <div th:replace="~{fragments/form :: field('dob', 'Date of birth', 'date')}"></div>
+        <div th:replace="~{fragments/form :: field('address', 'Address', 'text')}"></div>
+        <div th:replace="~{fragments/form :: field('parentContact', 'Parent contact', 'tel')}"></div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/admin/students}" class="btn btn-link">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>

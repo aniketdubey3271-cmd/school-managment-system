@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('File too large')}"></head>
+<body class="bg-light">
+
+<!-- Shown when an upload exceeds the size limit (rejected before any controller runs). -->
+<div class="container text-center mt-5">
+    <h1 class="display-6">File too large</h1>
+    <p class="text-muted">Uploads can be at most 10 MB. Please choose a smaller file.</p>
+    <a href="javascript:history.back()" class="btn btn-primary">Go back</a>
+</div>
+
+</body>
+</html>

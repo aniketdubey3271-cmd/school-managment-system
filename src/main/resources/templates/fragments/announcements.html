@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+  list(views, deleteBase, ownerId)
+  deleteBase: URL prefix for delete buttons, or null for none.
+  ownerId:    if set, only announcements posted by this user id get a delete button.
+  Content is rendered with th:text, so it is always escaped.
+-->
+<div th:fragment="list(views, deleteBase, ownerId)">
+    <div th:if="${#lists.isEmpty(views)}" class="text-muted">No announcements yet.</div>
+    <div th:each="v : ${views}" class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start gap-2">
+                <h3 class="h6 mb-1" th:text="${v.announcement.title}">Title</h3>
+                <form th:if="${deleteBase != null && (ownerId == null || v.announcement.postedBy.id == ownerId)}"
+                      th:action="@{${deleteBase} + '/' + ${v.announcement.id} + '/delete'}" method="post"
+                      onsubmit="return confirm('Delete this announcement?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </div>
+            <div class="small text-muted mb-2">
+                <span th:text="${v.author}">Author</span> ·
+                <span th:text="${#temporals.format(v.announcement.createdAt, 'dd MMM yyyy, HH:mm')}"></span> ·
+                <span th:if="${v.announcement.targetClass == null}" class="badge text-bg-primary">Everyone</span>
+                <span th:if="${v.announcement.targetClass != null}" class="badge text-bg-secondary"
+                      th:text="'Class ' + ${v.announcement.targetClass.displayName}"></span>
+            </div>
+            <p class="mb-0" th:text="${v.announcement.content}" style="white-space: pre-line"></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${assignment.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 840px">
+    <a th:replace="~{fragments/layout :: back('/teacher/assignments', 'Assignments')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-start mb-1">
+        <h1 class="h3 m-0" th:text="${assignment.title}">Title</h1>
+        <div class="d-flex gap-2">
+            <a th:href="@{/teacher/assignments/{id}/edit(id=${assignment.id})}" class="btn btn-outline-secondary">Edit</a>
+            <form th:action="@{/teacher/assignments/{id}/delete(id=${assignment.id})}" method="post"
+                  onsubmit="return confirm('Delete this assignment?')">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+    <p class="text-muted">
+        <span th:text="${assignment.schoolClass.displayName} + ' · ' + ${assignment.subject.name} + ' · due ' + ${#temporals.format(assignment.dueDate, 'EEE, dd MMM yyyy, HH:mm')}"></span>
+        <span th:if="${assignment.isPastDue(now)}" class="badge text-bg-secondary">Closed</span>
+    </p>
+    <p th:if="${assignment.description}" th:text="${assignment.description}" style="white-space: pre-line"></p>
+
+    <h2 class="h5 mt-4">Submissions</h2>
+    <table class="table align-middle">
+        <thead><tr><th>Roll no</th><th>Student</th><th>File</th><th>Submitted</th></tr></thead>
+        <tbody>
+        <tr th:each="r : ${rows}">
+            <td th:text="${r.student.rollNo}"></td>
+            <td th:text="${r.student.name}"></td>
+            <td>
+                <a th:if="${r.submission}" th:text="${r.submission.originalFilename}"
+                   th:href="@{/teacher/assignments/{id}/submissions/{sid}/file(id=${assignment.id}, sid=${r.submission.id})}"></a>
+                <span th:unless="${r.submission}" class="badge text-bg-light">Not submitted</span>
+            </td>
+            <td th:text="${r.submission} ? ${#temporals.format(r.submission.submittedAt, 'dd MMM, HH:mm')} : ''"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(rows)}">
+            <td colspan="4" class="text-center text-muted">No students in this class.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

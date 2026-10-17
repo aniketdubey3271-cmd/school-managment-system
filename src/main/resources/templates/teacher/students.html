@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Students ' + ${schoolClass.displayName})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 720px">
+    <a th:replace="~{fragments/layout :: back('/teacher/classes', 'My Classes')}"></a>
+    <h1 class="h3 mb-3" th:text="'Students in ' + ${schoolClass.displayName}">Students</h1>
+
+    <table class="table">
+        <thead><tr><th>Roll no</th><th>Name</th></tr></thead>
+        <tbody>
+        <tr th:each="s : ${students}">
+            <td th:text="${s.rollNo}"></td>
+            <td th:text="${s.name}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(students)}">
+            <td colspan="2" class="text-center text-muted">No students in this class yet.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

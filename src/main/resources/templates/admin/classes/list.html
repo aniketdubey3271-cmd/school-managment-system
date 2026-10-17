@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Classes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <a th:replace="~{fragments/layout :: back('/admin/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0">Classes</h1>
+        <a th:href="@{/admin/classes/new}" class="btn btn-primary">Add class</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead><tr><th>Class</th><th>Class teacher</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="c : ${classes}">
+                <td><a th:href="@{/admin/classes/{id}(id=${c.id})}" th:text="${c.displayName}"></a></td>
+                <td th:text="${c.classTeacher} ? ${c.classTeacher.name} : '—'"></td>
+                <td class="text-end"><a th:href="@{/admin/classes/{id}(id=${c.id})}" class="btn btn-sm btn-outline-secondary">Manage</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(classes)}">
+                <td colspan="3" class="text-center text-muted">No classes yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

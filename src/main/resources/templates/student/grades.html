@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Grades')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 720px">
+    <a th:replace="~{fragments/layout :: back('/student/dashboard', 'Dashboard')}"></a>
+    <h1 class="h3 mb-3">My Grades</h1>
+
+    <div th:if="${gradesByExam.isEmpty()}" class="alert alert-info">No marks have been entered yet.</div>
+
+    <div th:each="entry : ${gradesByExam}" class="mb-4">
+        <h2 class="h5" th:text="${entry.key.label}">Exam</h2>
+        <table class="table">
+            <thead><tr><th>Subject</th><th>Marks</th><th class="text-end">%</th></tr></thead>
+            <tbody>
+            <tr th:each="g : ${entry.value}">
+                <td th:text="${g.subject.name}"></td>
+                <td th:text="${g.scoreText}"></td>
+                <td class="text-end" th:text="${g.percent} + '%'"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

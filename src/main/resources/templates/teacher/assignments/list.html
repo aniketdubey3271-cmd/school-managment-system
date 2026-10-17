@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Assignments')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <a th:replace="~{fragments/layout :: back('/teacher/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0">Assignments</h1>
+        <a th:href="@{/teacher/assignments/new}" class="btn btn-primary">New assignment</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead><tr><th>Title</th><th>Class</th><th>Subject</th><th>Due</th><th>Submitted</th></tr></thead>
+            <tbody>
+            <tr th:each="r : ${rows}">
+                <td><a th:href="@{/teacher/assignments/{id}(id=${r.assignment.id})}" th:text="${r.assignment.title}"></a></td>
+                <td th:text="${r.assignment.schoolClass.displayName}"></td>
+                <td th:text="${r.assignment.subject.name}"></td>
+                <td>
+                    <span th:text="${#temporals.format(r.assignment.dueDate, 'dd MMM yyyy, HH:mm')}"></span>
+                    <span th:if="${r.assignment.isPastDue(now)}" class="badge text-bg-secondary">Closed</span>
+                </td>
+                <td th:text="${r.submitted} + ' / ' + ${r.classSize}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(rows)}">
+                <td colspan="5" class="text-center text-muted">No assignments yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Announcements')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 840px">
+    <a th:replace="~{fragments/layout :: back('/student/dashboard', 'Dashboard')}"></a>
+    <h1 class="h3 mb-3">Announcements</h1>
+    <div th:replace="~{fragments/announcements :: list(${views}, null, null)}"></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Announcements')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 840px">
+    <a th:replace="~{fragments/layout :: back('/teacher/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="h3 mb-3">Announcements</h1>
+
+    <div th:if="${#lists.isEmpty(myClasses)}" class="alert alert-info">
+        You can post once you're assigned to a class.
+    </div>
+
+    <form th:unless="${#lists.isEmpty(myClasses)}" th:object="${form}" th:action="@{/teacher/announcements}"
+          method="post" class="card card-body mb-4">
+        <h2 class="h6">Message a class</h2>
+        <div th:replace="~{fragments/form :: globalErrors}"></div>
+        <div class="mb-3">
+            <label class="form-label" for="targetClassId">Class</label>
+            <select class="form-select" th:field="*{targetClassId}" th:errorclass="is-invalid">
+                <option value="">Select a class</option>
+                <option th:each="mc : ${myClasses}" th:value="${mc.schoolClass.id}"
+                        th:text="'Class ' + ${mc.schoolClass.displayName}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('targetClassId')}" th:errors="*{targetClassId}"></div>
+        </div>
+        <div th:replace="~{fragments/form :: field('title', 'Title', 'text')}"></div>
+        <div class="mb-3">
+            <label class="form-label" for="content">Message</label>
+            <textarea class="form-control" rows="4" th:field="*{content}" th:errorclass="is-invalid"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+        </div>
+        <div><button type="submit" class="btn btn-primary">Post</button></div>
+    </form>
+
+    <h2 class="h5">Notices for you and your classes</h2>
+    <div th:replace="~{fragments/announcements :: list(${views}, '/teacher/announcements', ${me})}"></div>
+</div>
+
+</body>
+</html>

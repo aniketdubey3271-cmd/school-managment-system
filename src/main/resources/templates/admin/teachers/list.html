@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Teachers')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <a th:replace="~{fragments/layout :: back('/admin/dashboard', 'Dashboard')}"></a>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0">Teachers</h1>
+        <a th:href="@{/admin/teachers/new}" class="btn btn-primary">Add teacher</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+            <tr><th>Name</th><th>Username</th><th>Email</th><th>Specialization</th><th>Contact</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${teachers}">
+                <td th:text="${t.name}"></td>
+                <td th:text="${t.user.username}"></td>
+                <td th:text="${t.user.email}"></td>
+                <td th:text="${t.subjectSpecialization} ?: '—'"></td>
+                <td th:text="${t.contact} ?: '—'"></td>
+                <td>
+                    <span th:if="${t.user.enabled}" class="badge text-bg-success">Active</span>
+                    <span th:unless="${t.user.enabled}" class="badge text-bg-secondary">Disabled</span>
+                </td>
+                <td class="text-end text-nowrap">
+                    <a th:href="@{/admin/teachers/{id}/edit(id=${t.id})}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <form th:action="@{/admin/teachers/{id}/delete(id=${t.id})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete this teacher and their login?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(teachers)}">
+                <td colspan="7" class="text-center text-muted">No teachers yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

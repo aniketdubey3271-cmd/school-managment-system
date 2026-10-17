@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Classes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <a th:replace="~{fragments/layout :: back('/teacher/dashboard', 'Dashboard')}"></a>
+    <h1 class="h3 mb-4">My Classes</h1>
+
+    <div th:if="${#lists.isEmpty(myClasses)}" class="alert alert-info">
+        You haven't been assigned to any class yet. Ask the admin to assign you.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-4" th:each="mc : ${myClasses}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5 card-title">
+                        <span th:text="${mc.schoolClass.displayName}">10-A</span>
+                        <span th:if="${mc.classTeacher}" class="badge text-bg-primary align-middle fs-6">Class teacher</span>
+                    </h2>
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <a th:href="@{/teacher/classes/{id}/students(id=${mc.schoolClass.id})}"
+                           class="btn btn-sm btn-outline-secondary">Students</a>
+                        <a th:if="${mc.classTeacher}" th:href="@{/teacher/classes/{id}/attendance(id=${mc.schoolClass.id})}"
+                           class="btn btn-sm btn-outline-primary">Mark attendance</a>
+                        <a th:href="@{/teacher/classes/{id}/report(id=${mc.schoolClass.id})}"
+                           class="btn btn-sm btn-outline-secondary">Report</a>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(mc.subjects)}">
+                        <div class="small text-muted mb-1">Enter grades</div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a th:each="s : ${mc.subjects}" th:text="${s.name}"
+                               th:href="@{/teacher/classes/{cid}/subjects/{sid}/grades(cid=${mc.schoolClass.id}, sid=${s.id})}"
+                               class="btn btn-sm btn-outline-success"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

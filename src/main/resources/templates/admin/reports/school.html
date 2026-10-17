@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reports')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 840px">
+    <a th:replace="~{fragments/layout :: back('/admin/dashboard', 'Dashboard')}"></a>
+    <h1 class="h3 mb-3">Attendance by class</h1>
+    <form th:replace="~{fragments/reports :: rangeForm(${range})}"></form>
+
+    <table class="table align-middle">
+        <thead><tr><th>Class</th><th>Class teacher</th><th>Attendance</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="r : ${rows}">
+            <td th:text="${r.schoolClass.displayName}"></td>
+            <td th:text="${r.schoolClass.classTeacher} ? ${r.schoolClass.classTeacher.name} : '—'"></td>
+            <td><span th:replace="~{fragments/reports :: pct(${r.tally})}"></span></td>
+            <td class="text-end">
+                <a th:href="@{/admin/reports/classes/{id}(id=${r.schoolClass.id}, from=${range.from}, to=${range.to})}"
+                   class="btn btn-sm btn-outline-secondary">Class report</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(rows)}"><td colspan="4" class="text-center text-muted">No classes yet.</td></tr>
+        </tbody>
+    </table>
+    <p class="form-text">Percent of student-days marked present in the range (present / marked).</p>
+</div>
+
+</body>
+</html>

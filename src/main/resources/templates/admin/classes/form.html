@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${form.id == null} ? 'Add class' : 'Edit class')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container" style="max-width: 640px">
+    <a th:replace="~{fragments/layout :: back('/admin/classes', 'Classes')}"></a>
+    <h1 class="h3 mb-4" th:text="${form.id == null} ? 'Add class' : 'Edit class'">Class</h1>
+
+    <form th:object="${form}" method="post"
+          th:action="${form.id == null} ? @{/admin/classes} : @{/admin/classes/{id}(id=${form.id})}">
+        <div th:replace="~{fragments/form :: globalErrors}"></div>
+
+        <div class="row">
+            <div class="col-sm-6"><div th:replace="~{fragments/form :: field('className', 'Class (e.g. 10)', 'text')}"></div></div>
+            <div class="col-sm-6"><div th:replace="~{fragments/form :: field('section', 'Section (e.g. A)', 'text')}"></div></div>
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="classTeacherId">Class teacher <span class="text-muted">(marks attendance)</span></label>
+            <select class="form-select" th:field="*{classTeacherId}" th:errorclass="is-invalid">
+                <option value="">None</option>
+                <option th:each="t : ${teachers}" th:value="${t.id}" th:text="${t.name}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('classTeacherId')}" th:errors="*{classTeacherId}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="${form.id == null} ? @{/admin/classes} : @{/admin/classes/{id}(id=${form.id})}" class="btn btn-link">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>
