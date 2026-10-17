@@ -2,11 +2,12 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
 COPY pom.xml .
+COPY .mvn/settings.xml .mvn/settings.xml
 COPY src ./src
 # Maven Central can temporarily rate-limit Render with HTTP 429. Retry only
 # that transient download failure; fail immediately for code/build errors.
 RUN for attempt in 1 2 3 4 5; do \
-      if mvn -B -DskipTests package > /tmp/maven-build.log 2>&1; then \
+      if mvn -s .mvn/settings.xml -B -DskipTests package > /tmp/maven-build.log 2>&1; then \
         cat /tmp/maven-build.log; \
         exit 0; \
       else \
