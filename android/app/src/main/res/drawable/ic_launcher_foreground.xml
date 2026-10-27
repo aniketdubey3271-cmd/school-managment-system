@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A graduation cap, kept inside the adaptive icon's 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,34 L84,47 L54,60 L24,47 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,54 L38,66 C38,71 46,75 54,75 C62,75 70,71 70,66 L70,54 L54,61 Z" />
+    <path
+        android:fillColor="#A9DADA"
+        android:pathData="M80,49 L82,49 L82,66 L80,66 Z" />
+</vector>

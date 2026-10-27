@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -108,6 +110,19 @@ public class TeacherPortalService {
         return assignments.findBySchoolClassIdAndSubjectId(classId, subjectId)
                 .filter(a -> a.getTeacher().getId().equals(teacher.getId()))
                 .orElseThrow(() -> new AccessDeniedException("You don't teach this subject in this class"));
+    }
+
+    /** Subjects shown in a teacher's class report: all for the class teacher, otherwise the ones they teach there. */
+    @Transactional(readOnly = true)
+    public Predicate<Subject> reportSubjects(Teacher teacher, SchoolClass schoolClass) {
+        if (isClassTeacher(teacher, schoolClass)) {
+            return subject -> true;
+        }
+        Set<Long> taught = assignments.findByTeacher(teacher).stream()
+                .filter(a -> a.getSchoolClass().getId().equals(schoolClass.getId()))
+                .map(a -> a.getSubject().getId())
+                .collect(Collectors.toSet());
+        return subject -> taught.contains(subject.getId());
     }
 
     // ---- students ----
